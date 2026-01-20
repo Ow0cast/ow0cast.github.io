@@ -1,0 +1,38 @@
+---
+import xtermCssUrl from '@xterm/xterm/css/xterm.css?url';
+import terminalScriptUrl from '../scripts/terminal.ts?url';
+---
+
+<div id="terminal"></div>
+<link rel="stylesheet" href={xtermCssUrl} />
+<script type="module" src={terminalScriptUrl}></script>
+<style>
+	#terminal {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		width: 100vw;
+		height: 100vh;
+		margin: 0;
+		padding: 0;
+		overflow: hidden;
+		z-index: 1;
+	}
+	
+	#terminal .xterm {
+		width: 100% !important;
+		height: 100% !important;
+	}
+	
+	#terminal .xterm-screen {
+		width: 100% !important;
+		height: 100% !important;
+	}
+	
+	#terminal .xterm-viewport {
+		width: 100% !important;
+		height: 100% !important;
+	}
+</style>
