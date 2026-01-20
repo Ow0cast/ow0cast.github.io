@@ -5,7 +5,7 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
     vite: {
         server: {
-            allowedHosts: ['d937klkmke3e.share.zrok.io']
+            allowedHosts: ['owuh.dev']
         }
     }
 });
