@@ -1,11 +1,12 @@
 ---
 import xtermCssUrl from '@xterm/xterm/css/xterm.css?url';
-import terminalScriptUrl from '../scripts/terminal.ts?url';
 ---
 
 <div id="terminal"></div>
 <link rel="stylesheet" href={xtermCssUrl} />
-<script type="module" src={terminalScriptUrl}></script>
+<script>
+	import '../lib/terminal.ts';
+</script>
 <style>
 	#terminal {
 		position: fixed;
