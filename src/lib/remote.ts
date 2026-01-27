@@ -1,5 +1,5 @@
 export class RemoteClient {
-    constructor(accessToken, wsUrl = 'ws://localhost:8000/ws/terminal') {
+    constructor(accessToken, wsUrl = 'ws://ursa-minor.owuh.dev:8000/ws/terminal') {
         this.accessToken = accessToken;
         this.wsUrl = wsUrl;
         this.ws = null;
