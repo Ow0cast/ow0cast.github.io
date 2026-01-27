@@ -1,0 +1,79 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const url = Astro.url;
+const code = url.searchParams.get('code');
+const state = url.searchParams.get('state');
+const session_state = url.searchParams.get('session_state');
+const iss = url.searchParams.get('iss');
+---
+
+<Layout>
+	<div id="callback-container">
+		<p>Processing authentication...</p>
+	</div>
+</Layout>
+
+<script>
+	const urlParams = new URLSearchParams(window.location.search);
+	const code = urlParams.get('code');
+	const state = urlParams.get('state');
+	const session_state = urlParams.get('session_state');
+	const iss = urlParams.get('iss');
+
+	const verifier = sessionStorage.getItem('verifier');
+
+	if (!code) {
+		console.error('No code parameter found');
+		document.getElementById('callback-container')!.innerHTML = '<p>Error: No authorization code received</p>';
+	} else if (!verifier) {
+		console.error('No verifier found in sessionStorage');
+		document.getElementById('callback-container')!.innerHTML = '<p>Error: No code verifier found</p>';
+	} else {
+		fetch('/api/token', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				code: code,
+				code_verifier: verifier,
+				redirect_uri: window.location.origin + '/callback',
+			}),
+		})
+			.then(response => response.json())
+			.then(data => {
+				console.log('Token response:', data);
+				if (data.access_token) {
+					// Store token or handle success
+					sessionStorage.setItem('access_token', data.access_token);
+					document.getElementById('callback-container')!.innerHTML = '<p>Authentication successful! Redirecting...</p>';
+					// Redirect to home or wherever needed
+					setTimeout(() => {
+						window.location.href = '/';
+					}, 1000);
+				} else {
+					console.error('Token exchange failed:', data);
+					document.getElementById('callback-container')!.innerHTML = `<p>Error: ${data.error || 'Token exchange failed'}</p>`;
+				}
+			})
+			.catch(error => {
+				console.error('Error during token exchange:', error);
+				document.getElementById('callback-container')!.innerHTML = `<p>Error: ${error.message}</p>`;
+			});
+	}
+</script>
+
+<style>
+	body {
+		background-color: black;
+		color: white;
+	}
+	#callback-container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 100vh;
+		font-family: system-ui, -apple-system, sans-serif;
+	}
+</style>

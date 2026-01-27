@@ -12,6 +12,8 @@ const term = new Terminal({
 	cursorBlink: true,
 });
 
+window.term = term;
+
 // Resize terminal to fill container
 function resizeTerminal() {
 	if (!el) return;
@@ -60,15 +62,18 @@ async function runLine(line: string) {
 }
 
 term.onData(async (data) => {
+	if (window.connected) return;
 	switch (data) {
 		case '\u0003': // Ctrl+C
 			term.write('^C');
 			commandBuffer = '';
+			if (window.connected) return;
 			prompt();
 			return;
 
 		case '\r': // Enter
 			term.write('\r\n');
+			if (window.connected) return;
 			await runLine(commandBuffer);
 			commandBuffer = '';
 			prompt();
